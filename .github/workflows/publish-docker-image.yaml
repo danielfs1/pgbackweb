@@ -65,7 +65,7 @@ jobs:
           --file docker/Dockerfile .
 
       - name: Push the Docker image
-        run: docker push danielfs1/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
+        run: docker push ghcr.io/danielfs1/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
 
   merge-and-push-manifest:
     name: Merge manifest
