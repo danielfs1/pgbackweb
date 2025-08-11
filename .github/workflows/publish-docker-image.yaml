@@ -1,5 +1,9 @@
 name: Build & Publish Docker Image
 
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+
 on:
   workflow_dispatch:
     inputs:
