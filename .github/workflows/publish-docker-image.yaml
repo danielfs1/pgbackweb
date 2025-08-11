@@ -37,21 +37,31 @@ jobs:
         with:
           ref: ${{ github.event.inputs.commit }}
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USER }}
+      #     password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build the Docker image
         run: >
           docker build
-          --tag eduardolat/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
+          --tag danielfs1/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
           --build-arg TARGETPLATFORM=linux/${{ matrix.vars.platform }}
           --file docker/Dockerfile .
 
       - name: Push the Docker image
-        run: docker push eduardolat/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
+        run: docker push danielfs1/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
 
   merge-and-push-manifest:
     name: Merge manifest
