@@ -60,7 +60,7 @@ jobs:
       - name: Build the Docker image
         run: >
           docker build
-          --tag danielfs1/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
+          --tag ghcr.io/danielfs1/pgbackweb:${{ github.event.inputs.tag }}-${{ matrix.vars.platform }}
           --build-arg TARGETPLATFORM=linux/${{ matrix.vars.platform }}
           --file docker/Dockerfile .
 
